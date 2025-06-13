@@ -1,8 +1,7 @@
-version: '3.8'
-name: roboshop
 networks:
   default:
-    name: roboshop
+    external:
+      name: roboshop
 volumes:
   mongodb: #docker volume create mongodb
   redis:
@@ -72,12 +71,7 @@ services:
 
   shipping:
     image: shipping:v1
-    # ulimits:
-    #   nofile:
-    #     soft: 65536
-    #     hard: 65536
     container_name: shipping
-    command: sh -c "sleep 20 && node /opt/shipping/shipping.jar"
     depends_on:
     - mysql
 
@@ -99,4 +93,3 @@ services:
     - rabbitmq
     - user
     - cart
-

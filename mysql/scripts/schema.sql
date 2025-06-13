@@ -19,6 +19,6 @@ CREATE TABLE `cities` (
   FULLTEXT KEY `city_idx` (`city`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6223666 DEFAULT CHARSET=latin1;
 
-CREATE USER IF NOT EXISTS `shipping`@`%` IDENTIFIED WITH mysql_native_password BY `RoboShop@1`;
-GRANT ALL ON cities.* TO `shipping`@`%`;
+CREATE USER IF NOT EXISTS 'shipping'@'%' IDENTIFIED WITH caching_sha2_password BY 'RoboShop@1';
+GRANT ALL ON cities.* TO 'shipping'@'%';
 FLUSH PRIVILEGES;
