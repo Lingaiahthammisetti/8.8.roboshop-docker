@@ -1,29 +1,17 @@
-# Use a CentOS-based base image
-FROM centos:8
+# Use the official RabbitMQ base image
+FROM rabbitmq:3-management
 
-# Add Erlang repo
-RUN curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+# Set environment variables for RabbitMQ default user and password
+ENV RABBITMQ_DEFAULT_USER=roboshop
+ENV RABBITMQ_DEFAULT_PASS=roboshop123
 
-# Add RabbitMQ repo
-RUN curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
-
-# Install RabbitMQ
-RUN dnf install -y rabbitmq-server
-
-# Install dependencies
-RUN dnf install -y curl sudo net-tools
-
-# Enable and expose RabbitMQ
+# Expose the default RabbitMQ and management plugin ports
 EXPOSE 5672 15672
 
-# Enable management plugin
-RUN rabbitmq-plugins enable rabbitmq_management
+# Optional: Add a script to configure permissions on container start
+# This is useful if you need to fine-tune or verify user setup beyond default ENV
+COPY configure.sh /usr/local/bin/configure.sh
+RUN chmod +x /usr/local/bin/configure.sh
 
-# Add application user
-RUN rabbitmq-server -detached && \
-    rabbitmqctl add_user roboshop roboshop123 && \
-    rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" && \
-    rabbitmqctl stop
-
-# Set entrypoint
-CMD ["/usr/sbin/rabbitmq-server"]
+# Run the configure script after RabbitMQ starts
+CMD ["bash", "-c", "rabbitmq-server & sleep 10 && /usr/local/bin/configure.sh && tail -f /dev/null"]
