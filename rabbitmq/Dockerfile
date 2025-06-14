@@ -1,8 +1,4 @@
-FROM centos:8
-
-# Set environment variables
-ENV RABBITMQ_VERSION=3.12.12
-ENV ERLANG_VERSION=26.2.5
+FROM rockylinux:8
 
 # Install dependencies and RabbitMQ
 RUN dnf -y install curl gnupg \
@@ -11,12 +7,9 @@ RUN dnf -y install curl gnupg \
     && dnf -y install rabbitmq-server \
     && dnf clean all
 
-# Copy startup and setup script
 COPY configure.sh /usr/local/bin/configure.sh
 RUN chmod +x /usr/local/bin/configure.sh
 
-# Expose RabbitMQ default ports
 EXPOSE 5672 15672
 
-# Start RabbitMQ and run the setup
 CMD ["/usr/local/bin/configure.sh"]
