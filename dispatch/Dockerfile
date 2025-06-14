@@ -4,7 +4,7 @@ FROM golang:1.20-bullseye
 # Set environment variables
 ENV GOPATH=/app/go \
     GOCACHE=/tmp/go-build-cache \
-    AMQP_HOST=rabbitmq.lingaiah.online \
+    AMQP_HOST=rabbitmq \
     AMQP_USER=roboshop \
     AMQP_PASS=roboshop123
 
