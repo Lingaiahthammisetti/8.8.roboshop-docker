@@ -1,15 +1,12 @@
-FROM rockylinux:8
+FROM rabbitmq:3-management
 
-# Install dependencies and RabbitMQ
-RUN dnf -y install curl gnupg \
-    && curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash \
-    && curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash \
-    && dnf -y install rabbitmq-server \
-    && dnf clean all
+# Environment variables to auto-create user
+ENV RABBITMQ_DEFAULT_USER=roboshop
+ENV RABBITMQ_DEFAULT_PASS=roboshop123
 
-COPY configure.sh /usr/local/bin/configure.sh
-RUN chmod +x /usr/local/bin/configure.sh
+# Copy setup script into container
+COPY setup.sh /setup.sh
+RUN chmod +x /setup.sh
 
-EXPOSE 5672 15672
-
-CMD ["/usr/local/bin/configure.sh"]
+# Run the setup script after container starts
+CMD ["sh", "-c", "/setup.sh && rabbitmq-server"]
