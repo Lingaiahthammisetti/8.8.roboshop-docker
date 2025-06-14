@@ -4,7 +4,7 @@
 for i in mysql mongodb catalogue cart user shipping payment web dispatch rabbitmq; do cd $i ; docker build -t $i:v1 . ; cd ..; done
 docker pull redis
 
-docker run -d -p 3306:3306 --name mysql --network roboshop -e DB_HOST=mysql mysql:v1
+docker run -d -p 3306:3306 --name mysql --network roboshop mysql:v1
 docker run -d -p 27017:27017 --name mongodb --network roboshop mongodb:v1
 docker run -d -p 6379:6379 --name redis --network roboshop redis:latest
 docker run -d -p 5672:5672 --name rabbitmq --network roboshop rabbitmq:latest
